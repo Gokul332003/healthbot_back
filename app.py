@@ -1112,7 +1112,8 @@ chatbot = Chat(pairs, reflections)
 # Update the chatbot_response function to return text and audio as bytes
 def chatbot_response(user_message):
     for pattern, responses in pairs:
-        if (match := re.match(pattern, user_message, re.IGNORECASE)):
+        match = re.match(pattern, user_message, re.IGNORECASE)
+        if match:
             text_response = random.choice(responses)
             tts = gTTS(text_response)
             audio_filename = "response.mp3"
@@ -1123,7 +1124,7 @@ def chatbot_response(user_message):
     return (
         "I'm sorry, but I didn't quite understand that. Could you please rephrase or ask another question?",
         None
-    )  # Return as separate values
+    )
 
 @app.route('/backend/get_response', methods=['POST'])
 def get_response():
@@ -1139,38 +1140,4 @@ def get_response():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-# # Initialize the chatbot
-# def chatbot_response(user_message):
-#     for pattern, responses in pairs:
-#       if (match := re.match(pattern, user_message, re.IGNORECASE)):
-#             return random.choice(responses)
-#     return "I'm sorry, but I didn't quite understand that. Could you please rephrase or ask another question?"
-
-
-# # Update the chatbot_response function to return both text and audio
-# def chatbot_response(user_message):
-#     for pattern, responses in pairs:
-#         if (match := re.match(pattern, user_message, re.IGNORECASE)):
-#             text_response = random.choice(responses)
-#             tts = gTTS(text_response)
-#             tts.save("response.mp3")  # Save the TTS audio to a file
-#             return text_response, "response.mp3"
-#     return "I'm sorry, but I didn't quite understand that. Could you please rephrase or ask another question?", None
-
-# Update the Flask route to return text and audio responses
-
-# @app.route('/backend/get_response', methods=['POST'])
-# def get_response():
-#     user_message = request.json['message']
-#     text_response, audio_filename = chatbot_response(user_message)
-#     return jsonify({'response': text_response, 'audio': audio_filename})
-
-
-# @app.route('/backend/get_response', methods=['POST'])
-# def get_response():
-#     user_message = request.json['message']
-#     response = chatbot_response(user_message)
-#     return jsonify({'response': response})
 
