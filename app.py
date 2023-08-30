@@ -4,6 +4,7 @@ from nltk.chat.util import Chat, reflections
 import re
 import random
 from gtts import gTTS
+from io import BytesIO
 import base64
 
 app = Flask(__name__)
@@ -1116,15 +1117,18 @@ def chatbot_response(user_message):
         if match:
             text_response = random.choice(responses)
             tts = gTTS(text_response)
-            audio_filename = "response.mp3"
-            tts.save(audio_filename)  # Save the TTS audio to a file
-            with open(audio_filename, 'rb') as audio_file:
-                audio_bytes = audio_file.read()
+
+            audio_stream = BytesIO()  # Create an in-memory stream
+            tts.write_to_fp(audio_stream)  # Write audio data to the stream
+
+            audio_bytes = audio_stream.getvalue()  # Get the bytes from the stream
+
             return text_response, audio_bytes  # Return as separate values
     return (
         "I'm sorry, but I didn't quite understand that. Could you please rephrase or ask another question?",
         None
     )
+
 
 @app.route('/get_response', methods=['POST'])
 
