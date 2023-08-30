@@ -1126,7 +1126,8 @@ def chatbot_response(user_message):
         None
     )
 
-@app.route('/backend/get_response', methods=['POST'])
+@app.route('/get_response', methods=['POST'])
+
 def get_response():
     
     user_message = request.json['message']
@@ -1140,4 +1141,3 @@ def get_response():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
